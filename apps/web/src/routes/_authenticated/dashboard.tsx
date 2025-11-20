@@ -8,7 +8,7 @@ import {
   useQuery,
 } from "convex/react";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   component: RouteComponent,
 });
 

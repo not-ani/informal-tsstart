@@ -8,6 +8,9 @@
  * @module
  */
 
+import type * as collaborators from "../collaborators.js";
+import type * as form_fields from "../form_fields.js";
+import type * as form_responses from "../form_responses.js";
 import type * as forms from "../forms.js";
 import type * as healthCheck from "../healthCheck.js";
 import type * as privateData from "../privateData.js";
@@ -21,6 +24,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  collaborators: typeof collaborators;
+  form_fields: typeof form_fields;
+  form_responses: typeof form_responses;
   forms: typeof forms;
   healthCheck: typeof healthCheck;
   privateData: typeof privateData;

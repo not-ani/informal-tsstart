@@ -14,7 +14,6 @@ import { createServerFn } from "@tanstack/react-start";
 import type { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { Toaster } from "@/components/ui/sonner";
-import Header from "../components/header";
 import appCss from "../index.css?url";
 
 const fetchClerkAuth = createServerFn({ method: "GET" }).handler(async () => {
@@ -72,7 +71,6 @@ function RootDocument() {
           </head>
           <body>
             <div className="grid h-svh grid-rows-[auto_1fr]">
-              <Header />
               <Outlet />
             </div>
             <Toaster richColors />

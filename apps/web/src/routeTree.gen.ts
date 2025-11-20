@@ -10,18 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TodosRouteImport } from './routes/todos'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as SuccessRouteImport } from './routes/success'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as FormIdIndexRouteImport } from './routes/form/$id/index'
+import { Route as SignInSplatRouteImport } from './routes/sign-in.$'
+import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
+import { Route as AuthenticatedFormsRouteImport } from './routes/_authenticated/forms'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as AuthenticatedFormIdIndexRouteImport } from './routes/_authenticated/form/$id/index'
+import { Route as AuthenticatedFormIdEditIndexRouteImport } from './routes/_authenticated/form/$id/edit/index'
 
 const TodosRoute = TodosRouteImport.update({
   id: '/todos',
   path: '/todos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const SuccessRoute = SuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -29,44 +40,129 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FormIdIndexRoute = FormIdIndexRouteImport.update({
-  id: '/form/$id/',
-  path: '/form/$id/',
+const SignInSplatRoute = SignInSplatRouteImport.update({
+  id: '/sign-in/$',
+  path: '/sign-in/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiUploadthingRoute = ApiUploadthingRouteImport.update({
+  id: '/api/uploadthing',
+  path: '/api/uploadthing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedFormsRoute = AuthenticatedFormsRouteImport.update({
+  id: '/forms',
+  path: '/forms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedFormIdIndexRoute =
+  AuthenticatedFormIdIndexRouteImport.update({
+    id: '/form/$id/',
+    path: '/form/$id/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedFormIdEditIndexRoute =
+  AuthenticatedFormIdEditIndexRouteImport.update({
+    id: '/form/$id/edit/',
+    path: '/form/$id/edit/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
-  '/form/$id': typeof FormIdIndexRoute
+  '/app': typeof AuthenticatedAppRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/forms': typeof AuthenticatedFormsRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/form/$id': typeof AuthenticatedFormIdIndexRoute
+  '/form/$id/edit': typeof AuthenticatedFormIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
-  '/form/$id': typeof FormIdIndexRoute
+  '/app': typeof AuthenticatedAppRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/forms': typeof AuthenticatedFormsRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/form/$id': typeof AuthenticatedFormIdIndexRoute
+  '/form/$id/edit': typeof AuthenticatedFormIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/success': typeof SuccessRoute
   '/todos': typeof TodosRoute
-  '/form/$id/': typeof FormIdIndexRoute
+  '/_authenticated/app': typeof AuthenticatedAppRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/forms': typeof AuthenticatedFormsRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
+  '/sign-in/$': typeof SignInSplatRoute
+  '/_authenticated/form/$id/': typeof AuthenticatedFormIdIndexRoute
+  '/_authenticated/form/$id/edit/': typeof AuthenticatedFormIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/todos' | '/form/$id'
+  fullPaths:
+    | '/'
+    | '/success'
+    | '/todos'
+    | '/app'
+    | '/dashboard'
+    | '/forms'
+    | '/api/uploadthing'
+    | '/sign-in/$'
+    | '/form/$id'
+    | '/form/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/todos' | '/form/$id'
-  id: '__root__' | '/' | '/dashboard' | '/todos' | '/form/$id/'
+  to:
+    | '/'
+    | '/success'
+    | '/todos'
+    | '/app'
+    | '/dashboard'
+    | '/forms'
+    | '/api/uploadthing'
+    | '/sign-in/$'
+    | '/form/$id'
+    | '/form/$id/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/success'
+    | '/todos'
+    | '/_authenticated/app'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/forms'
+    | '/api/uploadthing'
+    | '/sign-in/$'
+    | '/_authenticated/form/$id/'
+    | '/_authenticated/form/$id/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  SuccessRoute: typeof SuccessRoute
   TodosRoute: typeof TodosRoute
-  FormIdIndexRoute: typeof FormIdIndexRoute
+  ApiUploadthingRoute: typeof ApiUploadthingRoute
+  SignInSplatRoute: typeof SignInSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,11 +174,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -92,21 +195,85 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/form/$id/': {
-      id: '/form/$id/'
+    '/sign-in/$': {
+      id: '/sign-in/$'
+      path: '/sign-in/$'
+      fullPath: '/sign-in/$'
+      preLoaderRoute: typeof SignInSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/uploadthing': {
+      id: '/api/uploadthing'
+      path: '/api/uploadthing'
+      fullPath: '/api/uploadthing'
+      preLoaderRoute: typeof ApiUploadthingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/forms': {
+      id: '/_authenticated/forms'
+      path: '/forms'
+      fullPath: '/forms'
+      preLoaderRoute: typeof AuthenticatedFormsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/app': {
+      id: '/_authenticated/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/form/$id/': {
+      id: '/_authenticated/form/$id/'
       path: '/form/$id'
       fullPath: '/form/$id'
-      preLoaderRoute: typeof FormIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedFormIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/form/$id/edit/': {
+      id: '/_authenticated/form/$id/edit/'
+      path: '/form/$id/edit'
+      fullPath: '/form/$id/edit'
+      preLoaderRoute: typeof AuthenticatedFormIdEditIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAppRoute: typeof AuthenticatedAppRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFormsRoute: typeof AuthenticatedFormsRoute
+  AuthenticatedFormIdIndexRoute: typeof AuthenticatedFormIdIndexRoute
+  AuthenticatedFormIdEditIndexRoute: typeof AuthenticatedFormIdEditIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAppRoute: AuthenticatedAppRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFormsRoute: AuthenticatedFormsRoute,
+  AuthenticatedFormIdIndexRoute: AuthenticatedFormIdIndexRoute,
+  AuthenticatedFormIdEditIndexRoute: AuthenticatedFormIdEditIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  SuccessRoute: SuccessRoute,
   TodosRoute: TodosRoute,
-  FormIdIndexRoute: FormIdIndexRoute,
+  ApiUploadthingRoute: ApiUploadthingRoute,
+  SignInSplatRoute: SignInSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

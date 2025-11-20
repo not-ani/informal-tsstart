@@ -1,3 +1,4 @@
+/*
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
@@ -35,11 +36,11 @@ export const submit = mutation({
       throw new Error("Form not found");
     }
 
-    if (form.requiresAuth && !identity) {
+    if (form.defaultRequired && !identity) {
       throw new Error("This form requires authentication to submit");
     }
 
-    const submissionId = await ctx.db.insert("submissions", {
+    const submissionId = await ctx.db.insert("", {
       formId: args.formId,
       responderId: identity?.subject,
       submittedAt: Date.now(),
@@ -97,3 +98,4 @@ export const getMySubmission = query({
     return submission;
   },
 });
+*/

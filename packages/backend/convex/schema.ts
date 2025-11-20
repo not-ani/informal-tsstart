@@ -7,110 +7,81 @@ export default defineSchema({
     completed: v.boolean(),
   }),
   forms: defineTable({
-    title: v.string(),
+    createdBy: v.string(),
+    defaultRequired: v.optional(v.boolean()),
+    authRequired: v.optional(v.boolean()),
+    oneTime: v.optional(v.boolean()),
     description: v.optional(v.string()),
-    creatorId: v.string(),
-    requiresAuth: v.boolean(),
-    createdAt: v.number(),
+    name: v.optional(v.string()),
+  }).index("by_createdBy", ["createdBy"]),
 
-    // We use a union to enforce strict shapes for different question types
-    questions: v.array(
-      v.union(
-        // 1. Simple Input Types (Short answer, Paragraph, Date, Time)
-        v.object({
-          id: v.string(),
-          type: v.union(
-            v.literal("short_text"),
-            v.literal("paragraph"),
-            v.literal("date"),
-            v.literal("time")
-          ),
-          title: v.string(),
-          required: v.boolean(),
-        }),
+  form_collaborators: defineTable({
+    formId: v.id("forms"),
+    userEmail: v.string(),
+    role: v.union(v.literal("owner"), v.literal("editor"), v.literal("viewer")),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("accepted"),
+      v.literal("rejected")
+    ),
+    invitedBy: v.string(),
+    invitedAt: v.number(),
+    respondedAt: v.optional(v.number()),
+  })
+    .index("by_formId", ["formId"])
+    .index("by_userEmail", ["userEmail"])
+    .index("by_formId_and_userEmail", ["formId", "userEmail"])
+    .index("by_userEmail_and_status", ["userEmail", "status"]),
 
-        // 2. Selection Types (Multiple choice, Checkboxes, Dropdown)
-        v.object({
-          id: v.string(),
-          type: v.union(
-            v.literal("multiple_choice"),
-            v.literal("checkboxes"),
-            v.literal("dropdown")
-          ),
-          title: v.string(),
-          required: v.boolean(),
-          options: v.array(v.string()),
-          hasOtherOption: v.boolean(), // "Other: ____" field support
-        }),
+  form_responses: defineTable({
+    formId: v.id("forms"),
+    userEmail: v.optional(v.string()),
+  })
+    .index("by_formId", ["formId"])
+    .index("by_userEmail_and_formId", ["userEmail", "formId"])
+    .index("by_formId_and_userEmail", ["formId", "userEmail"]),
 
-        // 3. Linear Scale (e.g., 1 to 5)
+  field_responses: defineTable({
+    formId: v.id("forms"),
+    fieldId: v.id("form_fields"),
+    userEmail: v.optional(v.string()),
+    formResponseId: v.id("form_responses"),
+    response: v.union(v.string(), v.array(v.string())),
+  })
+    .index("by_formId", ["formId"])
+    .index("by_fieldId", ["fieldId"])
+    .index("by_formResponseId", ["formResponseId"])
+    .index("by_formId_and_fieldId", ["formId", "fieldId"])
+    .index("by_formId_and_fieldId_and_response", [
+      "formId",
+      "fieldId",
+      "response",
+    ]),
+  form_fields: defineTable({
+    formId: v.string(),
+    default: v.optional(v.any()),
+    name: v.string(),
+    order: v.float64(),
+    required: v.optional(v.boolean()),
+    selectOptions: v.optional(
+      v.array(
         v.object({
-          id: v.string(),
-          type: v.literal("linear_scale"),
-          title: v.string(),
-          required: v.boolean(),
-          min: v.number(), // e.g., 1
-          max: v.number(), // e.g., 5
-          minLabel: v.optional(v.string()), // e.g., "Worst"
-          maxLabel: v.optional(v.string()), // e.g., "Best"
-        }),
-
-        // 4. Grids (Multiple choice grid, Checkbox grid)
-        v.object({
-          id: v.string(),
-          type: v.union(
-            v.literal("multiple_choice_grid"),
-            v.literal("checkbox_grid")
-          ),
-          title: v.string(),
-          required: v.boolean(),
-          rows: v.array(v.string()),
-          columns: v.array(v.string()),
-        }),
-
-        // 5. File Upload
-        v.object({
-          id: v.string(),
-          type: v.literal("file_upload"),
-          title: v.string(),
-          required: v.boolean(),
-          maxFileSize: v.number(), // In bytes
-          allowedMimeTypes: v.optional(v.array(v.string())),
+          name: v.string(),
+          order: v.float64(),
         })
       )
     ),
-  }).index("by_creator", ["creatorId"]),
 
-  submissions: defineTable({
-    formId: v.id("forms"),
-    responderId: v.optional(v.string()), // User ID if authed, null if anon
-    submittedAt: v.number(),
-
-    answers: v.array(
-      v.object({
-        questionId: v.string(),
-        // The value shape changes based on the question type
-        value: v.union(
-          v.string(), // Short text, Paragraph, Date, Time, Linear Scale, Dropdown, Radio
-          v.array(v.string()), // Checkboxes (list of selected strings)
-          v.id("_storage"), // File Upload (reference to Convex file storage)
-
-          // Grids: An object mapping row names to selected column value(s)
-          // We store JSON strings here or strictly defined objects.
-          // For strict schema typing, we use an object where keys are row indices/ids.
-          v.object({
-            // Key: Row Label, Value: Column Label (or array of cols for checkbox grid)
-            gridData: v.array(
-              v.object({
-                row: v.string(),
-                cols: v.array(v.string()),
-              })
-            ),
-          })
-        ),
-      })
+    type: v.union(
+      v.literal("text"),
+      v.literal("textarea"),
+      v.literal("select"),
+      v.literal("number"),
+      v.literal("date"),
+      v.literal("time"),
+      v.literal("MCQ"),
+      v.literal("checkbox"),
+      v.literal("file")
     ),
-  })
-    .index("by_form", ["formId"])
-    .index("by_form_responder", ["formId", "responderId"]),
+  }).index("by_formId", ["formId"]),
 });
