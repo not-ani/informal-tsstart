@@ -3,7 +3,7 @@
 import React, { forwardRef, useRef } from "react";
 
 import { cn } from "@/lib/utils";
-import { AnimatedBeam } from "@/components/magicui/animated-beam";
+import { AnimatedBeam } from "../ui/animated-beam";
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -14,7 +14,7 @@ const Circle = forwardRef<
       ref={ref}
       className={cn(
         "z-10 flex size-12 items-center justify-center rounded-full border-2 bg-white p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
-        className,
+        className
       )}
     >
       {children}
@@ -36,7 +36,7 @@ export function Integrations({ className }: { className?: string }) {
     <div
       className={cn(
         "relative flex h-[500px] w-full items-center justify-center overflow-hidden p-10",
-        className,
+        className
       )}
       ref={containerRef}
     >
@@ -48,10 +48,7 @@ export function Integrations({ className }: { className?: string }) {
         </div>
         <div className="flex flex-col justify-center">
           <Circle ref={div6Ref} className="size-16">
-             <p className="text-black">
-
-             Informal
-             </p>
+            <p className="text-black">Informal</p>
           </Circle>
         </div>
         <div className="flex flex-col justify-center gap-2">
